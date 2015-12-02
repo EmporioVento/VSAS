@@ -17,11 +17,9 @@ namespace labs.Graph
     [Serializable]
     public class node_view
     {
-        private int topNum;
         [NonSerialized]
         private graphNode _grNode;
         private graph_view _graph_view;
-        private bool move;
         private bool isValid;
         public string txt_id;
         public string txt_weight;
@@ -72,7 +70,7 @@ namespace labs.Graph
         {
             get
             {
-                return move;
+                return _move;
             }
             set
             {
@@ -158,27 +156,11 @@ namespace labs.Graph
             }
         }
 
-     /*   public int TopNum
-        {
-            get
-            {
-                return topNum;
-            }
-            set
-            {
-                topNum = value;
-            }
-        }*/
-
         public void Validate()
         {
             try
             {
-           /*     topNum = int.Parse(txt_id);
-                if (!Graph.CheckTopNum(this))
-                    IsValid = false;
-                else
-                    IsValid = true;*/
+
             }
             catch (Exception ex)
             {

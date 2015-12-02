@@ -43,23 +43,15 @@ namespace labs.Gant
         Stopwatch stopWatch = new Stopwatch();
 
         private Canvas canvas;
-        int countLinks;
-        double propuskChannels, proizvodProcessors;
-        bool isDuplex;
 
         public double Keap, Kp, Ke, Time = 0;
         public string time;
 
-        public DestinationAlgorithms(Canvas canvas, graph_view _graph_view, graph_viewCS _graph_viewCS, double propuskChannels,
-            double proizvodProcessors, bool isDuplex, int countLinks)
+        public DestinationAlgorithms(Canvas canvas, graph_view _graph_view, graph_viewCS _graph_viewCS)
         {
             this.canvas = canvas;
             this._graph_view = _graph_view;
             this._graph_viewCS = _graph_viewCS;
-            this.propuskChannels = propuskChannels;
-            this.proizvodProcessors = proizvodProcessors;
-            this.isDuplex = isDuplex;
-            this.countLinks = countLinks;
             countCS = _graph_viewCS.TopList.Count;
             matrixCS = new int[countCS, countCS];
             stopWatch.Start();
@@ -218,7 +210,7 @@ namespace labs.Gant
                     double startY = LinesHorizontal.Find(x => x.id.Equals(TopListCSNew[i].id)).startY;
 
                     _w_view = new work_view(this, TopListNew[j].id.ToString(),
-                        interval_vertical * (int)Math.Ceiling(TopListNew[j].weight / proizvodProcessors), 50,
+                        interval_vertical * (int)TopListNew[j].weight, 50,
                         startY - 20, TopListCSNew[i].id);
                     status[j] = true;
                     i++;
@@ -482,10 +474,6 @@ namespace labs.Gant
                                             list_sub_duplex.Add(LinesHorizontal[m].SubLinesHorizontal[u]);
                         }
 
-                        if (!isDuplex)
-                            _sub_line_duplex = LinesHorizontal.Find(x => x.id.Equals(_sub_line.to_id)).
-                                        SubLinesHorizontal.Find(x => x.to_id.Equals(_sub_line.from_id));
-
                         List<sub_work_view> _sub_work_new = new List<sub_work_view>();
                         Dictionary<sub_work_view, double> _dict_sub_work = new Dictionary<sub_work_view, double>();
 
@@ -494,14 +482,6 @@ namespace labs.Gant
                             if (SubWorkList[m].end_y == _sub_line.posY)
                                 _dict_sub_work.Add(SubWorkList[m], SubWorkList[m].end_x);
 
-                            for (int u = 0; u < list_sub_duplex.Count; u++)
-                                if (SubWorkList[m].end_y == list_sub_duplex[u].posY)
-                                    if (!isDuplex)
-                                        try
-                                        {
-                                            _dict_sub_work.Add(SubWorkList[m], SubWorkList[m].end_x);
-                                        }
-                                        catch (Exception ex) { }
                         }
 
                         _dict_sub_work = _dict_sub_work.OrderBy(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
@@ -509,18 +489,6 @@ namespace labs.Gant
                         foreach (var n_c in _dict_sub_work)
                             _sub_work_new.Add(n_c.Key);
 
-                        if (horiz_line.SubLinesHorizontal.Count + list_sub_duplex.Count <= countLinks)
-                            for (int m = 0; m < _sub_work_new.Count; m++)
-                            {
-                                double other_sub_start_x = _sub_work_new[m].end_x - _sub_work_new[m].rect_width;
-
-                                if ((start_sub_point_next < other_sub_start_x && (start_sub_point_next + weight) > other_sub_start_x) ||
-                                    (start_sub_point_next < _sub_work_new[m].end_x && (start_sub_point_next + weight) > other_sub_start_x) ||
-                                    start_sub_point_next == other_sub_start_x || (start_sub_point_next + weight == _sub_work_new[m].end_x))
-                                    start_sub_point_next = _sub_work_new[m].end_x;
-                            }
-                        else
-                        {
                             List<sub_work_view> _sub_work_other_links = new List<sub_work_view>();
                             Dictionary<sub_work_view, double> _dict_sub_work_link = new Dictionary<sub_work_view, double>();
 
@@ -561,7 +529,7 @@ namespace labs.Gant
 
                             if (_sub_work_new.Count == 0)
                                 start_sub_point_next = ShiftLinks(_sub_work_other_links, start_sub_point_next, weight);
-                        }
+                        
 
                         sub_work_view _sub_work = new sub_work_view(this, dependWorkList[k].rect_id, TopListNew[j].id,
                             weight, start_sub_point_next, _sub_line.posY - 10, maxSubID() + 1);
@@ -589,7 +557,7 @@ namespace labs.Gant
                     _list.Add(_sub_work_other_links[c]);
                     count_nakladka++;
                 }
-                if (count_nakladka >= countLinks)
+                //if (count_nakladka >= countLinks)
                 {
                     for (int s = 0; s < _list.Count; s++)
                     {
@@ -640,7 +608,7 @@ namespace labs.Gant
                 start = dependWorkList[0].end_x;
 
             List<work_view> _work_new = new List<work_view>();
-            double weight_node = interval_vertical * (int)Math.Ceiling(TopListNew[j].weight / proizvodProcessors);
+            double weight_node = interval_vertical * (int)TopListNew[j].weight;
 
             Dictionary<work_view, double> _dict_work = new Dictionary<work_view, double>();
 
@@ -703,7 +671,7 @@ namespace labs.Gant
             foreach (labs.Graph.edge_view line in _graph_view.edgeList)
             {
                 neighbors_nodes[line.To.id].Add(line.From.id);
-                edge_weight[new KeyValuePair<int, int>(line.From.id, line.To.id)] = (int)Math.Ceiling(line.Weight / propuskChannels);
+                edge_weight[new KeyValuePair<int, int>(line.From.id, line.To.id)] = (int)line.Weight;
             }
         }
 

@@ -4,16 +4,13 @@
         xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:Custom="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon" x:Name="mainWnd" x:Class="labs.MainWindow"
-        Title="ПЗКС Сюр А.В." Height="670" Width="924" SizeChanged="mainWnd_SizeChanged" StateChanged="mainWnd_StateChanged" 
+        Title="ТЗЯПП Василенко Сюр Ширий" Height="670" Width="924" SizeChanged="mainWnd_SizeChanged" StateChanged="mainWnd_StateChanged" 
              WindowStartupLocation="CenterScreen" MouseMove="mainWnd_MouseMove">
 
     <Grid x:Name="grid1" Width="914" HorizontalAlignment="Left" SizeChanged="Grid_SizeChanged_1" Height="638" VerticalAlignment="Top">
 
         <Menu HorizontalAlignment="Left" VerticalAlignment="Top" Width="1500" Panel.ZIndex="10" >
             <MenuItem Header="  Граф задачі / КС  " Click="MenuItem_Click_1"/>
-            <MenuItem Header="  Моделювання " Click="MenuItem_Click_2"/>
-            <MenuItem Header="  Статистика  " Click="MenuItem_Click_4"/>
-            <MenuItem Header="  Допомога    "/>
             <MenuItem Header="  Вихід   " Click="MenuItem_Click_3"/>
         </Menu>
 
@@ -50,16 +47,10 @@
             	Click="Generate_Click" Height="30"/>
                 </Grid>
             </Grid>
+            
+                <Grid x:Name="gridGant">
 
-            <Grid x:Name="gridGant">
-
-                <Label Content="Кількість фізичних&#xA;лінків" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="txtBoxLinks" HorizontalAlignment="Left" Height="23" Margin="146,76,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="33"/>
-                <Label Content="Продуктивність &#xA;процесорів" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="txtBoxProcessors" HorizontalAlignment="Left" Height="23" Margin="146,139,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="33"/>
-                <Label Content="Пропускна здатність&#xA;каналів" HorizontalAlignment="Left" Margin="10,193,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="txtBoxChannels" HorizontalAlignment="Left" Height="23" Margin="146,202,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="33"/>
-                <Label Content="   Алгоритм &#xD;&#xA;призначення" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+            <Label Content="   Алгоритм &#xD;&#xA;призначення" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
                     Margin="87,367,10,589"/>
                 <Label Content="Алгоритм" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
             	    Margin="10,374,115,593"/>
@@ -77,7 +68,7 @@
                 <Button x:Name="btnGant" Content="Діаграма Ганта" HorizontalAlignment="Left" Margin="23,536,0,0" VerticalAlignment="Top" 
             	Width="142" RenderTransformOrigin="0.5,0.5" Click="Button_Click_Gant" Height="30"/>
 
-                <Grid x:Name="gridDuplex">
+                <Grid x:Name="gridDuplex" Visibility="Hidden">
                     <RadioButton x:Name="radBtnDuplex" Content="Дуплекс" HorizontalAlignment="Left" Margin="29,295,0,0" VerticalAlignment="Top" IsChecked="True" />
                     <RadioButton x:Name="radBtnHalfDuplex" Content="Напівдуплекс" HorizontalAlignment="Left" Margin="29,316,0,0" VerticalAlignment="Top"/>
                     <Label Content="Дуплексність" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="29,262,68,710"/>

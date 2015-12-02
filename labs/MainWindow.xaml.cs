@@ -32,7 +32,6 @@ namespace labs
         private graph_view _grView;
         private DestinationAlgorithms _destin_alg;
         private graph_viewCS _grViewCS;
-        Window1 _wn1;
         
         public MainWindow()
         {
@@ -40,9 +39,6 @@ namespace labs
             _grView = new graph_view(canvas, true);
             _grViewCS = new graph_viewCS(canvasCS, false);
             
-      //      _grView.LoadGraph(_grView.OpenGraphFrom("C:\\Users\\Annet\\Documents\\Visual Studio 2012\\Projects\\labs\\labs\\bin\\Debug\\Граф задачі\\GraphTask0.txt"));
-        //    _grViewCS.LoadGraph(_grViewCS.OpenGraphFrom("C:\\Users\\Annet\\Documents\\Visual Studio 2012\\Projects\\labs\\labs\\bin\\Debug\\Граф КС\\GraphCSKP.txt"));
-
             PanelsHidden();            
         }
 
@@ -214,8 +210,6 @@ namespace labs
 
         public void PanelsHidden()
         {
-            tabCntrl.Visibility = Visibility.Hidden;
-            GraphPanel.Visibility = Visibility.Hidden;
             ModelPanel.Visibility = Visibility.Hidden;
         }
 
@@ -227,8 +221,6 @@ namespace labs
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
             PanelsHidden();
-            GraphPanel.Visibility = Visibility.Visible;
-            tabCntrl.Visibility = Visibility.Visible;
             tabTask.IsSelected = true;
             Connected.Content = "Перевірка ациклічності";
         }
@@ -261,34 +253,11 @@ namespace labs
             else if (radBtnDestAlg6.IsChecked == true)
                 destination_algorithm = 6;
 
-            bool isDuplex = true;
-            if (radBtnDuplex.IsChecked == false)
-                isDuplex = false;
-
-            int countLinks = int.Parse(txtBoxLinks.Text);
-            double proizvodProcessors = double.Parse(txtBoxProcessors.Text);
-            double propuskChannels = double.Parse(txtBoxChannels.Text);
-
-            _destin_alg = new DestinationAlgorithms(canvasGant, _grView, _grViewCS, propuskChannels, proizvodProcessors, isDuplex, countLinks);
+            _destin_alg = new DestinationAlgorithms(canvasGant, _grView, _grViewCS);
             if (algorithm != -1 && destination_algorithm != -1)
                 _destin_alg.test(algorithm, destination_algorithm, true);
             else
                 MessageBox.Show("Для побудови діаграми Ганта необхідно обрати алгоритми");
-        }
-
-        private void MenuItem_Click_4(object sender, RoutedEventArgs e)
-        {
-            bool isDuplex = true;
-            if (radBtnDuplex.IsChecked == false)
-                isDuplex = false;
-
-            int countLinks = int.Parse(txtBoxLinks.Text);
-            double proizvodProcessors = double.Parse(txtBoxProcessors.Text);
-            double propuskChannels = double.Parse(txtBoxChannels.Text);
-
-
-            _wn1 = new Window1(_grView, _grViewCS, _destin_alg, propuskChannels, proizvodProcessors, isDuplex, countLinks, canvasGant);
-            _wn1.Show();
         }
     }
 }

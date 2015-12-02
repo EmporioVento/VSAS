@@ -33,7 +33,6 @@ namespace labs
         private static int NodeRadius = 25;
         private node_view parentView;
         private Brush opaqueBrush;
-        bool isMove = false;
 
         public static int Radius
         {
@@ -42,7 +41,6 @@ namespace labs
 
         private void node_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            isMove = false;
             parentView.Move = false;
         }
         

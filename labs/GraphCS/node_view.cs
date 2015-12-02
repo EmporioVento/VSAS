@@ -19,7 +19,6 @@ namespace labs.GraphCS
         [NonSerialized]
         private graphNodeCS _grNode;
         private graph_viewCS _graph_viewCS;
-        private bool move;
         private bool isValid;
         public string txt_id;
         public int id;
@@ -66,7 +65,7 @@ namespace labs.GraphCS
 
         public bool Move
         {
-            get { return move; }
+            get { return _move; }
             set {_move = value; }
         }        
 
