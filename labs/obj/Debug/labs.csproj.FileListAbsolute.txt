@@ -70,3 +70,6 @@ C:\labs\labs\obj\Debug\labs.Properties.Resources.resources
 C:\labs\labs\obj\Debug\labs.csproj.GenerateResource.Cache
 C:\labs\labs\bin\Debug\labs.exe
 C:\labs\labs\bin\Debug\labs.pdb
+C:\Users\Anna\Desktop\labs\VSAS\labs\bin\Debug\labs.exe.config
+C:\Users\Anna\Desktop\labs\VSAS\labs\obj\Debug\labs.exe
+C:\Users\Anna\Desktop\labs\VSAS\labs\obj\Debug\labs.pdb

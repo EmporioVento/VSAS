@@ -5,8 +5,8 @@
         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:Custom="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon" x:Name="mainWnd" x:Class="labs.MainWindow"
         Title="ТЗЯПП Василенко Сюр Ширий" Height="670" Width="924" SizeChanged="mainWnd_SizeChanged" StateChanged="mainWnd_StateChanged" 
-             WindowStartupLocation="CenterScreen" MouseMove="mainWnd_MouseMove">
-
+             WindowStartupLocation="CenterScreen" MouseMove="mainWnd_MouseMove"><!--+1 -->
+<
     <Grid x:Name="grid1" Width="914" HorizontalAlignment="Left" SizeChanged="Grid_SizeChanged_1" Height="638" VerticalAlignment="Top">
 
         <Menu HorizontalAlignment="Left" VerticalAlignment="Top" Width="1500" Panel.ZIndex="10" >
