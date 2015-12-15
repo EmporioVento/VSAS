@@ -13,8 +13,47 @@ using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 namespace labs.Graph
-{[Serializable]
+{
+    [Serializable]
+
+    [TestClass]
+    public class TaskGenerationTest
+    {
+        static Canvas canvas = new Canvas();
+        graph_view _grView = new graph_view(canvas, false);
+        [TestMethod]
+        public void TestGenerateGraph()
+        {
+            int count = 20;
+            int min_weight = 5;
+            int max_weight = 10;
+            double coherence = 0.9;
+            
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+            double new_coherence = (double)sum_nodes() / (double)(sum_nodes() + sum_edges());
+            Assert.AreEqual(coherence, new_coherence, 0.03, "Coherence is not correctly");
+        }
+
+        public int sum_nodes()
+        {
+            int sum_nodes = 0;
+            for (int i = 0; i < _grView.TopList.Count; i++)
+                sum_nodes += _grView.TopList[i].weight;
+            return sum_nodes;
+        }
+
+        public int sum_edges()
+        {
+            int sum_edges = 0;
+            for (int i = 0; i < _grView.edgeList.Count; i++)
+                sum_edges += _grView.edgeList[i].Weight;
+            return sum_edges;
+        }
+    }
+
     public class graph_view// : property_base
     {
 

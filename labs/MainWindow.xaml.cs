@@ -29,9 +29,9 @@ namespace labs
      [Serializable]
     public partial class MainWindow : Window
     {
-        private graph_view _grView;
-        private DestinationAlgorithms _destin_alg;
-        private graph_viewCS _grViewCS;
+        public graph_view _grView;
+        public DestinationAlgorithms _destin_alg;
+        public graph_viewCS _grViewCS;
         
         public MainWindow()
         {
