@@ -35,6 +35,8 @@ namespace labs.Graph
             _grView.GenerateGraph(count, min_weight, max_weight, coherence);
             double new_coherence = (double)sum_nodes() / (double)(sum_nodes() + sum_edges());
             Assert.AreEqual(coherence, new_coherence, 0.03, "Coherence is not correctly");
+            MessageBox.Show("Maybe Norm no Malo"); 
+            // WTF CodeReview
         }
 
         public int sum_nodes()
