@@ -1,0 +1,5 @@
+C:\Users\Vlad\Documents\GitHub\VSAS\UnitTestProjects\obj\Debug\UnitTestProjects.csprojResolveAssemblyReference.cache
+C:\Users\Vlad\Documents\GitHub\VSAS\UnitTestProjects\bin\Debug\UnitTestProjects.dll
+C:\Users\Vlad\Documents\GitHub\VSAS\UnitTestProjects\bin\Debug\UnitTestProjects.pdb
+C:\Users\Vlad\Documents\GitHub\VSAS\UnitTestProjects\obj\Debug\UnitTestProjects.dll
+C:\Users\Vlad\Documents\GitHub\VSAS\UnitTestProjects\obj\Debug\UnitTestProjects.pdb

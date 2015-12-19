@@ -27,17 +27,42 @@ namespace labs.Graph
         [TestMethod]
         public void TestGenerateGraph()
         {
-            int count = 20;
+            int count = 20000;
             int min_weight = 5;
             int max_weight = 10;
             double coherence = 0.9;
             
             _grView.GenerateGraph(count, min_weight, max_weight, coherence);
-            double new_coherence = (double)sum_nodes() / (double)(sum_nodes() + sum_edges());
-            Assert.AreEqual(coherence, new_coherence, 0.03, "Coherence is not correctly");
-            MessageBox.Show("Maybe Norm no Malo"); 
+            int ac = 0;
+            if (_grView.GraphIsAcyclic(false))
+            {
+                ac = 1;
+            }
+            Assert.AreEqual(ac, 0, 1, "NO Acyclic");
+            // WTF CodeReview OLOLO
+        }
+
+
+        [TestMethod]
+        public void TestGraphS() // slava test
+        {
+            int count = 20;
+            int min_weight = 5;
+            int max_weight = 10;
+            double coherence = 0.9;
+
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+
+            _grView.ClearAll();
+
+            int count_children = 100;
+            if (_grView.TopList.Count == 0 && _grView.edgeList.Count == 0 && _grView.canvas.Children.Count == 0)
+                count_children = 0;
+
+            Assert.AreEqual(count_children, 1, 1, "No Clear");
             // WTF CodeReview
         }
+
 
         public int sum_nodes()
         {
@@ -59,7 +84,7 @@ namespace labs.Graph
     public class graph_view// : property_base
     {
 
-        private Canvas canvas;
+        public Canvas canvas;
         public List<edge_view> edgeList = new List<edge_view>();
         public List<node_view> TopList = new List<node_view>();
         public List<int> idListAlgorithm = new List<int>();
