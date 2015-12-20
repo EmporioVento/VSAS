@@ -254,15 +254,14 @@ namespace labs.Graph
             Size size = new Size(1165, 662);
             cnvs.Measure(size);
             cnvs.Arrange(new Rect(size));
-            RenderTargetBitmap renderBitmap =
-              new RenderTargetBitmap(
-                (int)size.Width,
-                (int)size.Height,
-                80d,
-                80d,
-                PixelFormats.Pbgra32);
+            RenderTargetBitmap renderBitmap = new RenderTargetBitmap((int)size.Width, (int)size.Height, 
+                80d, 80d, PixelFormats.Pbgra32);
             renderBitmap.Render(cnvs);
+            SaveFileStream(renderBitmap, filename);
+        }
 
+        public void SaveFileStream(RenderTargetBitmap renderBitmap, string filename)
+        {
             using (FileStream outStream = new FileStream(filename, FileMode.Create))
             {
                 PngBitmapEncoder encoder = new PngBitmapEncoder();
@@ -418,7 +417,7 @@ namespace labs.Graph
             return temp;
         }
 
-        public int[,] Matrix(int algorithm)
+         public int[,] Matrix(int algorithm)
         {
             int n = TopList.Count;
             int[,] matrix = new int[n, n];
@@ -426,21 +425,27 @@ namespace labs.Graph
                 for (int j = 0; j < n; j++)
                     matrix[i, j] = 0;
 
-            if (algorithm == 2)
-                foreach (edge_view line in edgeList)
-                    for (int i = 0; i < n; i++)
-                        for (int j = 0; j < n; j++)
+            foreach (edge_view line in edgeList)
+            {
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        if (algorithm == 2)
+                        {
                             if (TopList[i].id == line.To.id)
                                 if (TopList[j].id == line.From.id)
                                     matrix[i, j] = 1;
-
-            if (algorithm == 3)
-                foreach (edge_view line in edgeList)
-                    for (int i = 0; i < n; i++)
-                        for (int j = 0; j < n; j++)
+                        }
+                        if (algorithm == 3)
+                        {
                             if (TopList[i].id == line.From.id)
                                 if (TopList[j].id == line.To.id)
                                     matrix[i, j] = 1;
+                        }
+                    }
+                }
+            }
             return matrix;
         }
 
