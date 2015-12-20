@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Diagnostics; 
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -20,22 +21,105 @@ namespace labs.Graph
     [Serializable]
 
     [TestClass]
-    public class TaskGenerationTest
+    public class Test_Graph
     {
         static Canvas canvas = new Canvas();
         graph_view _grView = new graph_view(canvas, false);
+
+        // 3 Юнит Теста, определять по названию.
         [TestMethod]
-        public void TestGenerateGraph()
+        public void Test_isAcyclic()
         {
-            int count = 20;
+            int count = 10;
+            int min_weight = 5;
+            int max_weight = 10;
+            double coherence = 0.5;
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+
+            int ac = 0;
+            if (_grView.GraphIsAcyclic(false))
+                ac = 1;
+            Assert.AreEqual(ac, 0, 0.5, "NO Acyclic"); // И так пишет ошибку;  0.5 - расхождения значения
+        }
+
+        [TestMethod]
+        public void Test_ZeroinCount()
+        {
+            int count = 0;
+            int min_weight = 5;
+            int max_weight = 10;
+            double coherence = 0;
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+
+            Assert.AreEqual(1, count);
+        }
+
+        [TestMethod]
+        public void Test_ZeroinCoherence()
+        {
+            int count = 10;
+            int min_weight = 5;
+            int max_weight = 10;
+            double coherence = 0;
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+
+            Assert.AreEqual(1, coherence);
+        }
+
+        // 3 Стресс/Лоад теста - условия выполнения: нахождения условия до Стресс теста, до 3мин
+        [TestMethod, Timeout (180000)]
+        public void Test_SearchTime10000Counts()
+        {
+            int count = 10000;
+            int min_weight = 5;
+            int max_weight = 10;
+            double coherence = 0.5;
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+            // Нет. 500+ Mb
+        }
+
+        [TestMethod, Timeout(180000)]
+        public void Test_750Count()
+        {
+            int count = 750;
+            int min_weight = 5;
+            int max_weight = 10;
+            double coherence = 0.5;
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+            // Nine. 29.8-32 Mb
+        }
+
+        [TestMethod, Timeout(180000)]
+        public void Test_500Count()
+        {
+            int count = 500;
+            int min_weight = 5;
+            int max_weight = 10;
+            double coherence = 0.5;
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+            // Прошел за 1 мин. 27 МБ. Так показало:(
+        }
+
+        [TestMethod]
+        public void TestGraphS() // slava test
+        {
+            int count = 10;
             int min_weight = 5;
             int max_weight = 10;
             double coherence = 0.9;
-            
+
             _grView.GenerateGraph(count, min_weight, max_weight, coherence);
-            double new_coherence = (double)sum_nodes() / (double)(sum_nodes() + sum_edges());
-            Assert.AreEqual(coherence, new_coherence, 0.03, "Coherence is not correctly");
+
+            _grView.ClearAll();
+
+            int count_children = 100;
+            if (_grView.TopList.Count == 0 && _grView.edgeList.Count == 0 && _grView.canvas.Children.Count == 0)
+                count_children = 0;
+
+            Assert.AreEqual(count_children, 1, 1, "No Clear");
+            // Slava Test1
         }
+
 
         public int sum_nodes()
         {
@@ -57,7 +141,7 @@ namespace labs.Graph
     public class graph_view// : property_base
     {
 
-        private Canvas canvas;
+        public Canvas canvas;
         public List<edge_view> edgeList = new List<edge_view>();
         public List<node_view> TopList = new List<node_view>();
         public List<int> idListAlgorithm = new List<int>();
