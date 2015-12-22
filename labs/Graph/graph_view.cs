@@ -100,6 +100,9 @@ namespace labs.Graph
             // Прошел за 1 мин. 27 МБ. Так показало:(
         }
 
+        /// <summary>
+        /// ////////////////////////////////////////////////////////////////////////////
+        /// </summary>
         [TestMethod]
         public void TestGraphS() // slava test
         {
@@ -120,23 +123,89 @@ namespace labs.Graph
             // Slava Test1
         }
 
-
-        public int sum_nodes()
+        [TestMethod]
+        public void Test_MinusMinWeight()
         {
-            int sum_nodes = 0;
-            for (int i = 0; i < _grView.TopList.Count; i++)
-                sum_nodes += _grView.TopList[i].weight;
-            return sum_nodes;
+            int count = 0;
+            int min_weight = -1;
+            int max_weight = 10;
+            double coherence = 0.5;
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+
+            Assert.AreEqual(1, min_weight);
         }
 
-        public int sum_edges()
+        [TestMethod]
+        public void Test_MinusMaxWeight()
         {
-            int sum_edges = 0;
-            for (int i = 0; i < _grView.edgeList.Count; i++)
-                sum_edges += _grView.edgeList[i].Weight;
-            return sum_edges;
+            int count = 0;
+            int min_weight = 1;
+            int max_weight = -1;
+            double coherence = 0.5;
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+
+            Assert.AreEqual(min_weight + 1, max_weight);
+        }
+
+        [TestMethod, Timeout(180000)]
+        public void Test_600Count()
+        {
+            int count = 600;
+            int min_weight = 5;
+            int max_weight = 10;
+            double coherence = 0.5;
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+            // Прошёл за 2 мин. 26.4-27.7 mb
+        }
+
+        [TestMethod, Timeout(180000)]
+        public void Test_650Count()
+        {
+            int count = 650;
+            int min_weight = 5;
+            int max_weight = 10;
+            double coherence = 0.5;
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+            // Nine. 22 ??? Mb 
+        }
+
+        [TestMethod, Timeout(180000)]
+        public void Test_625Count()
+        {
+            int count = 625;
+            int min_weight = 5;
+            int max_weight = 10;
+            double coherence = 0.5;
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+            // Nine 
+        }
+
+        [TestMethod, Timeout(180000)]
+        public void Test_615Count()
+        {
+            int count = 615;
+            int min_weight = 5;
+            int max_weight = 10;
+            double coherence = 0.5;
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+            // Прошёл за 2 мин. 26.7 - 27.8 Mb
+        }
+
+        [TestMethod, Timeout(180000)]
+        public void Test_620Count()
+        {
+            int count = 620;
+            int min_weight = 5;
+            int max_weight = 10;
+            double coherence = 0.5;
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+            // Nine
         }
     }
+
+    /// <summary>
+    /// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// </summary>
 
     public class graph_view// : property_base
     {
