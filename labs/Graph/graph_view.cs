@@ -567,33 +567,39 @@ namespace labs.Graph
                 for (int j = 0; j < n; j++)
                     matrix[i, j] = 0;
 
-            if (algorithm == 2)
-                foreach (edge_view line in edgeList)
-                    for (int i = 0; i < n; i++)
-                        for (int j = 0; j < n; j++)
+            foreach (edge_view line in edgeList)
+            {
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        if (algorithm == 2)
+                        {
                             if (TopList[i].id == line.To.id)
                                 if (TopList[j].id == line.From.id)
                                     matrix[i, j] = TopList[j].weight;
-
-            if (algorithm == 3)
-                foreach (edge_view line in edgeList)
-                    for (int i = 0; i < n; i++)
-                        for (int j = 0; j < n; j++)
+                        }
+                        if (algorithm == 3)
+                        {
                             if (TopList[i].id == line.From.id)
                                 if (TopList[j].id == line.To.id)
                                     matrix[i, j] = TopList[j].weight;
+                        }
+                    }
+                }
+            }
 
             for (int i = 0; i < n; i++)
             {
-                if (!neighbors_nodes.Contains(i))
-                    for (int j = 0; j < n; j++)
+                for (int j = 0; j < n; j++)
+                {
+                    if (!neighbors_nodes.Contains(i))
                         matrix[i, j] = 0;
-                else if (i == neighbors_nodes.First() && algorithm == 3)
-                    for (int j = 0; j < n; j++)
+                    else if (i == neighbors_nodes.First() && algorithm == 3)
                         if (matrix[i, j] != 0)
                             matrix[i, j] += TopList[i].weight;
+                }
             }
-
             return matrix;
         }
 
