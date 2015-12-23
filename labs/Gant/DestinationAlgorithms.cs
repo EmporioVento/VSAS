@@ -244,7 +244,7 @@ namespace labs.Gant
                             need_proc_id = FindNeedProcAlg6(j, dependWorkList);
                         DrawSubWorks(destination_algorithm, j, need_proc_id, dependWorkList);
                         DrawWork(j, need_proc_id, dependWorkList);
-                        
+
                         for (int k = 0; k < j; k++)
                             if (!status[k])
                             {
@@ -348,11 +348,11 @@ namespace labs.Gant
             int max_links = 0;
             _proc_mb2.Add(_proc_mb[0]);
             if (_proc_mb.Count > 1)
-            for (int i = 0; i < _proc_mb.Count; i++)
-            {
-                if (node_countEdges[_proc_mb[i].id] > max_links)
-                    max_links = node_countEdges[_proc_mb[i].id];
-            }
+                for (int i = 0; i < _proc_mb.Count; i++)
+                {
+                    if (node_countEdges[_proc_mb[i].id] > max_links)
+                        max_links = node_countEdges[_proc_mb[i].id];
+                }
 
             for (int i = 1; i < _proc_mb.Count; i++)
                 if (node_countEdges[_proc_mb[i].id] == max_links)
@@ -361,10 +361,10 @@ namespace labs.Gant
             int need_proc_id = _proc_mb2[0].id;
 
             if (_proc_mb2.Count > 1)
-            for (int i = 0; i < _proc_mb2.Count; i++)
-                for (int m = 0; m < dependWorkList.Count; m++)
-                    if (_proc_mb2[i].id == dependWorkList[m].rect_id)
-                        need_proc_id = _proc_mb2[i].id;
+                for (int i = 0; i < _proc_mb2.Count; i++)
+                    for (int m = 0; m < dependWorkList.Count; m++)
+                        if (_proc_mb2[i].id == dependWorkList[m].rect_id)
+                            need_proc_id = _proc_mb2[i].id;
 
             return need_proc_id;
         }
@@ -425,6 +425,42 @@ namespace labs.Gant
             return need_proc_id;
         }
 
+        public double get_start(List<sub_line> list_sub_duplex, List<sub_work_view> _sub_work_new,
+            Dictionary<sub_work_view, double> _dict_sub_work_link, List<sub_work_view> _sub_work_other_links,
+            double start_sub_point_next, double weight)
+        {
+            for (int m = 0; m < SubWorkList.Count; m++)
+                for (int u = 0; u < list_sub_duplex.Count; u++)
+                    if (SubWorkList[m].end_y == list_sub_duplex[u].posY)
+                        try
+                        {
+                            _dict_sub_work_link.Add(SubWorkList[m], SubWorkList[m].end_x);
+                        }
+                        catch (Exception ex) { }
+
+            _dict_sub_work_link = _dict_sub_work_link.OrderBy(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
+
+            foreach (var n_c in _dict_sub_work_link)
+                _sub_work_other_links.Add(n_c.Key);
+            List<sub_work_view> _sub_work_test_links = _sub_work_other_links;
+
+            for (int lol = 0; lol < SubWorkList.Count; lol++)
+                for (int m = 0; m < _sub_work_new.Count; m++)
+                {
+                    double other_sub_start_x = _sub_work_new[m].end_x - _sub_work_new[m].rect_width;
+
+                    if ((start_sub_point_next < other_sub_start_x && (start_sub_point_next + weight) > other_sub_start_x) ||
+                        (start_sub_point_next < _sub_work_new[m].end_x && (start_sub_point_next + weight) > other_sub_start_x) ||
+                        start_sub_point_next == other_sub_start_x || (start_sub_point_next + weight == _sub_work_new[m].end_x))
+                        start_sub_point_next = _sub_work_new[m].end_x;
+
+                    start_sub_point_next = ShiftLinks(_sub_work_other_links, start_sub_point_next, weight);
+                }
+            if (_sub_work_new.Count == 0)
+                start_sub_point_next = ShiftLinks(_sub_work_other_links, start_sub_point_next, weight);
+            return start_sub_point_next;
+        }
+
         public void DrawSubWorks(int alg, int j, int need_proc_id, List<work_view> dependWorkList)
         {
             double start_sub_point = 0;
@@ -464,72 +500,36 @@ namespace labs.Gant
                                         interval_vertical;
 
                         for (int m = 0; m < LinesHorizontal.Count; m++)
-                        {
                             if (LinesHorizontal[m] != horiz_line)
                                 for (int tt = 0; tt < horiz_line.SubLinesHorizontal.Count; tt++)
                                     for (int u = 0; u < LinesHorizontal[m].SubLinesHorizontal.Count; u++)
-                                        if (//LinesHorizontal[m].SubLinesHorizontal[u].to_id == horiz_line.id || //LinesHorizontal[m].SubLinesHorizontal[u].from_id == horiz_line.id ||
-                                            (LinesHorizontal[m].SubLinesHorizontal[u].to_id == horiz_line.SubLinesHorizontal[tt].to_id ||
+                                        if ((LinesHorizontal[m].SubLinesHorizontal[u].to_id == horiz_line.SubLinesHorizontal[tt].to_id ||
                                             LinesHorizontal[m].SubLinesHorizontal[u].from_id == horiz_line.SubLinesHorizontal[tt].to_id))// &&
                                             list_sub_duplex.Add(LinesHorizontal[m].SubLinesHorizontal[u]);
-                        }
 
                         List<sub_work_view> _sub_work_new = new List<sub_work_view>();
                         Dictionary<sub_work_view, double> _dict_sub_work = new Dictionary<sub_work_view, double>();
 
                         for (int m = 0; m < SubWorkList.Count; m++)
-                        {
                             if (SubWorkList[m].end_y == _sub_line.posY)
                                 _dict_sub_work.Add(SubWorkList[m], SubWorkList[m].end_x);
-
-                        }
 
                         _dict_sub_work = _dict_sub_work.OrderBy(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
 
                         foreach (var n_c in _dict_sub_work)
                             _sub_work_new.Add(n_c.Key);
 
-                            List<sub_work_view> _sub_work_other_links = new List<sub_work_view>();
-                            Dictionary<sub_work_view, double> _dict_sub_work_link = new Dictionary<sub_work_view, double>();
+                        List<sub_work_view> _sub_work_other_links = new List<sub_work_view>();
+                        Dictionary<sub_work_view, double> _dict_sub_work_link = new Dictionary<sub_work_view, double>();
 
-                            for (int s = 0; s < horiz_line.SubLinesHorizontal.Count; s++)
-                                if (horiz_line.SubLinesHorizontal[s].to_id != _sub_line.to_id)
-                                    for (int l = 0; l < SubWorkList.Count; l++)
-                                        if (SubWorkList[l].end_y == horiz_line.SubLinesHorizontal[s].posY)
-                                            _dict_sub_work_link.Add(SubWorkList[l], SubWorkList[l].end_x);
+                        for (int s = 0; s < horiz_line.SubLinesHorizontal.Count; s++)
+                            if (horiz_line.SubLinesHorizontal[s].to_id != _sub_line.to_id)
+                                for (int l = 0; l < SubWorkList.Count; l++)
+                                    if (SubWorkList[l].end_y == horiz_line.SubLinesHorizontal[s].posY)
+                                        _dict_sub_work_link.Add(SubWorkList[l], SubWorkList[l].end_x);
 
-                            for (int m = 0; m < SubWorkList.Count; m++)
-                                for (int u = 0; u < list_sub_duplex.Count; u++)
-                                    if (SubWorkList[m].end_y == list_sub_duplex[u].posY)
-                                        try
-                                        {
-                                            _dict_sub_work_link.Add(SubWorkList[m], SubWorkList[m].end_x);
-                                        }
-                                        catch (Exception ex) { }
-
-
-                            _dict_sub_work_link = _dict_sub_work_link.OrderBy(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
-
-                            foreach (var n_c in _dict_sub_work_link)
-                                _sub_work_other_links.Add(n_c.Key);
-                            List<sub_work_view> _sub_work_test_links = _sub_work_other_links;
-
-                            for (int lol = 0; lol < SubWorkList.Count; lol++)
-                                for (int m = 0; m < _sub_work_new.Count; m++)
-                                {
-                                    double other_sub_start_x = _sub_work_new[m].end_x - _sub_work_new[m].rect_width;
-
-                                    if ((start_sub_point_next < other_sub_start_x && (start_sub_point_next + weight) > other_sub_start_x) ||
-                                        (start_sub_point_next < _sub_work_new[m].end_x && (start_sub_point_next + weight) > other_sub_start_x) ||
-                                        start_sub_point_next == other_sub_start_x || (start_sub_point_next + weight == _sub_work_new[m].end_x))
-                                        start_sub_point_next = _sub_work_new[m].end_x;
-
-                                    start_sub_point_next = ShiftLinks(_sub_work_other_links, start_sub_point_next, weight);
-                                }
-
-                            if (_sub_work_new.Count == 0)
-                                start_sub_point_next = ShiftLinks(_sub_work_other_links, start_sub_point_next, weight);
-                        
+                        get_start(list_sub_duplex, _sub_work_new, _dict_sub_work_link, _sub_work_other_links,
+                            start_sub_point_next, weight);
 
                         sub_work_view _sub_work = new sub_work_view(this, dependWorkList[k].rect_id, TopListNew[j].id,
                             weight, start_sub_point_next, _sub_line.posY - 10, maxSubID() + 1);
@@ -557,40 +557,37 @@ namespace labs.Gant
                     _list.Add(_sub_work_other_links[c]);
                     count_nakladka++;
                 }
-                //if (count_nakladka >= countLinks)
+                for (int s = 0; s < _list.Count; s++)
                 {
-                    for (int s = 0; s < _list.Count; s++)
-                    {
-                        int c_n = 0;
-                        for (int ss = 0; ss < _list.Count; ss++)
-                            if (s != ss)
-                                if ((_list[s].start_x < _list[ss].start_x && _list[s].end_x > _list[ss].start_x) ||
-                                    (_list[s].start_x < _list[ss].end_x && _list[s].end_x > _list[ss].start_x) ||
-                                    _list[s].start_x == _list[ss].start_x || (_list[s].end_x == _list[ss].end_x))
-                                {
-                                    c_n++;
-                                    nakladka_in_others++;
+                    int c_n = 0;
+                    for (int ss = 0; ss < _list.Count; ss++)
+                        if (s != ss)
+                            if ((_list[s].start_x < _list[ss].start_x && _list[s].end_x > _list[ss].start_x) ||
+                                (_list[s].start_x < _list[ss].end_x && _list[s].end_x > _list[ss].start_x) ||
+                                _list[s].start_x == _list[ss].start_x || (_list[s].end_x == _list[ss].end_x))
+                            {
+                                c_n++;
+                                nakladka_in_others++;
 
-                                }
-                        if (c_n < count_nakladka - 1)
-                        {
-                            int index = _sub_work_test_links.IndexOf(_list[s]);
-                            _sub_work_test_links.Remove(_list[s]);
-
-                            _list.Remove(_list[s]);
-                            s--; c = index;
-                            nakladka_in_others -= c_n;
-                        }
-                    }
-                    if (nakladka_in_others >= (Math.Pow(count_nakladka, 2) - count_nakladka))
+                            }
+                    if (c_n < count_nakladka - 1)
                     {
-                        start_sub_point_next = _sub_work_test_links.First().end_x;
-                        _list.Remove(_sub_work_test_links.First());
-                        _sub_work_test_links.Remove(_sub_work_test_links.First());
-                        count_nakladka = _list.Count;
-                        c--;
-                        nakladka_in_others = 0;
+                        int index = _sub_work_test_links.IndexOf(_list[s]);
+                        _sub_work_test_links.Remove(_list[s]);
+
+                        _list.Remove(_list[s]);
+                        s--; c = index;
+                        nakladka_in_others -= c_n;
                     }
+                }
+                if (nakladka_in_others >= (Math.Pow(count_nakladka, 2) - count_nakladka))
+                {
+                    start_sub_point_next = _sub_work_test_links.First().end_x;
+                    _list.Remove(_sub_work_test_links.First());
+                    _sub_work_test_links.Remove(_sub_work_test_links.First());
+                    count_nakladka = _list.Count;
+                    c--;
+                    nakladka_in_others = 0;
                 }
             }
             return start_sub_point_next;
@@ -657,7 +654,7 @@ namespace labs.Gant
             Ke = Kp / TopListCSNew.Count;
             Keap = Tkr / T;
 
-            return "Tкрг = " + Tkr + "\nT = " + T + "\nKпр = " + Kp.ToString("N2") + "\nКе = " + Ke.ToString("N2") + "\nКеап = " 
+            return "Tкрг = " + Tkr + "\nT = " + T + "\nKпр = " + Kp.ToString("N2") + "\nКе = " + Ke.ToString("N2") + "\nКеап = "
                 + Keap.ToString("N2") + "\n";
         }
 

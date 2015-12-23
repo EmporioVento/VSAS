@@ -52,6 +52,72 @@ namespace labs.Graph
                 sum_edges += _grView.edgeList[i].Weight;
             return sum_edges;
         }
+
+        int index = 0;
+        
+        [TestMethod]
+        public int TestDeleteNode_Node()
+        {
+            TestGenerateGraph();
+            int id = _grView.TopList[index].id;
+            _grView.DeleteNode(_grView.TopList[index]);
+            double lol = 1.0;
+            for (int i = 0; i < _grView.TopList.Count; i++)
+                if (_grView.TopList[i].id == id)
+                {
+                    lol = 0.0;
+                    break;
+                }
+            Assert.AreEqual(1.0, lol, 0.0, "Node is not deleted!");
+            return id;
+        }
+
+        [TestMethod]
+        public void TestDeleteNode_Edge()
+        {
+            int id = TestDeleteNode_Node();
+         //   int id = _grView.TopList[index].id;
+            double lol = 1.0;
+            for (int i = _grView.edgeList.Count - 1; i >= 0; i--)
+                if (_grView.edgeList[i].From.id == id || _grView.edgeList[i].To.id == id)
+                    lol = 0.0;
+
+             Assert.AreEqual(1.0, lol, 0.0, "Edge is not deleted!");
+        }
+
+        // Стресс/Лоад
+        [TestMethod, Timeout(180000)]
+        public void Test_SearchTime20000Counts()
+        {
+            int count = 20000;
+            int min_weight = 5;
+            int max_weight = 10;
+            double coherence = 0.5;
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+            // -
+        }
+
+        [TestMethod, Timeout(180000)]
+        public void Test_1000Count()
+        {
+            int count = 1000;
+            int min_weight = 5;
+            int max_weight = 10;
+            double coherence = 0.5;
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+            // -
+        }
+
+        [TestMethod, Timeout(180000)]
+        public void Test_400Count()
+        {
+            int count = 400;
+            int min_weight = 5;
+            int max_weight = 10;
+            double coherence = 0.5;
+            _grView.GenerateGraph(count, min_weight, max_weight, coherence);
+            // + за 1 мин
+        }
     }
 
     public class graph_view// : property_base

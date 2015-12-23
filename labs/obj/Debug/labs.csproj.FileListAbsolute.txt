@@ -75,7 +75,6 @@ C:\Users\Anna\Desktop\labs\VSAS\labs\obj\Debug\labs.exe
 C:\Users\Anna\Desktop\labs\VSAS\labs\obj\Debug\labs.pdb
 C:\Users\Anna\Desktop\labs\VSAS\labs\bin\Debug\labs.exe
 C:\Users\Anna\Desktop\labs\VSAS\labs\bin\Debug\labs.pdb
-C:\Users\Anna\Desktop\labs\VSAS\labs\obj\Debug\labs.csprojResolveAssemblyReference.cache
 C:\Users\Anna\Desktop\labs\VSAS\labs\obj\Debug\graphNode.baml
 C:\Users\Anna\Desktop\labs\VSAS\labs\obj\Debug\MainWindow.baml
 C:\Users\Anna\Desktop\labs\VSAS\labs\obj\Debug\graphNodeCS.baml
