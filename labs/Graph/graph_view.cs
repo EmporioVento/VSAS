@@ -86,7 +86,7 @@ namespace labs.Graph
         }
 
         // Стресс/Лоад
-        [TestMethod, Timeout(180000)]
+        [TestMethod, Timeout(120000)]
         public void Test_SearchTime20000Counts()
         {
             int count = 20000;
@@ -97,7 +97,7 @@ namespace labs.Graph
             // -
         }
 
-        [TestMethod, Timeout(180000)]
+        [TestMethod, Timeout(120000)]
         public void Test_1000Count()
         {
             int count = 1000;
@@ -108,7 +108,7 @@ namespace labs.Graph
             // -
         }
 
-        [TestMethod, Timeout(180000)]
+        [TestMethod, Timeout(120000)]
         public void Test_400Count()
         {
             int count = 400;
